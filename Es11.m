@@ -16,6 +16,7 @@ z3=mat(1,8);
 alpha=0.7;
 eta=1;
 gamma=1;
+delta=zeros(8,maxit)';
 for i=1:maxit
     r(1,1)=2*(x1-4)-l1+l2;%deriv Lagr di x1    
     r(1,2)=2*x2-l1+l3;    %deriv Lagr di x2     
@@ -34,5 +35,9 @@ for i=1:maxit
        0 , 0 , 0 , mat(i,7), 0 , 0 , mat(i,4), 0;
        0 , 0 , 0 , 0 , mat(i,8), 0 , 0 ,mat(i,5);
        ];
-    
+    delta(i,:)=J\r(i,:)';
+    mat(i+1,:)=mat(i,:)+0.5*delta(i,:);
+    if(norm(r)<1e-6)
+        break;
+    end
 end
