@@ -39,7 +39,7 @@ for i=1:maxit
     slope=delta(i,:)*r(i,:)';
     if slope>0
         while true
-            mat(i+1,:)=mat(i,:)+alpha(:,i)'*delta(i,:)';
+            mat(i+1,:)=mat(i,:)-alpha(:,i)'*delta(i,:)';
             f(i+1)=(mat(i+1,1)-4)^2-mat(i+1,2)^2;
         end
         if (f(i+1)<f(i)-0.1*alpha(:,i)*slope)

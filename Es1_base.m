@@ -39,10 +39,10 @@ for i=1:maxit
     %discesa x_1,x_2
     slope=delta(i,1:2)*r(i,1:2)';
     if (slope>0)
-        while true
+        while (true)
             mat(i+1,1:2)=mat(i,1:2)-alpha'*delta(i,1:2)';
             f(i+1)=(mat(i+1,1)-4)^2-mat(i,2)^2;
-            if f(i+1)<f(i)-0.1*alpha*slope
+            if (f(i+1)<f(i)-0.1*alpha*slope)
                 break
             else
                 alpha=alpha/2;
