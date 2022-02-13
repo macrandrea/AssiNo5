@@ -14,9 +14,9 @@ z1=mat(1,6);
 z2=mat(1,7);
 z3=mat(1,8);
 delta=zeros(8,maxit)';
-alpha=ones(maxit,8)';
-f=zeros(maxit+1,1);
-f(1)=(x1-4)^2-x2^2;
+f=zeros(maxit,1);
+f(1)=(mat(1,1)-4)^2-mat(1,2)^2;
+alpha=ones(2,1);
 for i=1:maxit
     r(1,1)=2*(x1-4)-l1+l2;%deriv Lagr di x1    
     r(1,2)=2*x2-l1+l3;    %deriv Lagr di x2     
@@ -36,17 +36,19 @@ for i=1:maxit
        0 , 0 , 0 , 0 , mat(i,8), 0 , 0 ,mat(i,5);
        ];
     delta(i,:)=J\r(i,:)';
-    slope=delta(i,:)*r(i,:)';
-    if slope>0
+    %discesa x_1,x_2
+    slope=delta(i,1:2)*r(i,1:2)';
+    if (slope>0)
         while true
-            mat(i+1,:)=mat(i,:)+alpha(:,i)*delta(i,:);
-            f(i+1)=(mat(i+1,1)-4)^2-mat(i+1,2)^2;
+            mat(i+1,1:2)=mat(i,1:2)+alpha'*delta(i,1:2)';
+            f(i+1)=(mat(i+1,1)-4)^2-mat(i,2)^2;
+            if f(i+1)<f(i)-0.1*alpha*slope
+                break
+            else
+                alpha=alpha/2;
+            end
         end
-        if (f(i+1)<f(i)-0.1*alpha(:,i)*slope)
-            break
-        else
-            alpha(:,i)=alpha(:,i)/2;
-        end
+    %aggiungere condizioni di discesa singole e passi singoli
     end
     if(norm(r)<1e-6)
         break;
