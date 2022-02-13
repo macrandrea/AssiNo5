@@ -6,10 +6,10 @@ r=ones(maxit,8);
 x=ones(maxit,2);
 l=ones(maxit,3);
 z=ones(maxit,3);
-x(1,1:2)=[1.9,0.1];
-l(1,1:3)=[0.2,0.3,0.4];
-z(1,1:3)=[0.5,0.6,0.7];
-mu=0.01;
+x(1,1:2)=[1.9,0.01];
+l(1,1:3)=[0.2,0.1,0.2];
+z(1,1:3)=[0.1,0.2,0.3];
+mu=0.1;
 passoX=1;
 passoL=ones(3,1);
 passoZ=1;
@@ -31,12 +31,12 @@ for i=1:maxit
        0 , 0 , 0 , z(i,2), 0 , 0 , l(i,2), 0;
        0 , 0 , 0 , 0 , z(i,3), 0 , 0 ,l(i,3);
        ];
-    delta=cgs(J,r(i,:)',tol); %congj gradient with tol on relative res
+    delta=cgs(J,-r(i,:)',tol); %congj gradient with tol on relative res
     %res=J*r'-delta;
     %norm(res)-0.1*l*z';
-    x(i+1,:)=x(i,:)-0.1*delta(1:2)';
-    l(i+1,:)=l(i,:)-0.1*delta(3:5)';
-    z(i+1,:)=z(i,:)-0.1*delta(6:8)';
+    x(i+1,:)=x(i,:)+0.1*delta(1:2)';
+    l(i+1,:)=l(i,:)+0.1*delta(3:5)';
+    z(i+1,:)=z(i,:)+0.1*delta(6:8)';
     if(norm(r)<tol)
         break;
     else
