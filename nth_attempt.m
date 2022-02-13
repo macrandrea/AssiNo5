@@ -9,9 +9,9 @@ z=ones(maxit,3);
 x(1,1:2)=[1.9,0.1];
 l(1,1:3)=[0.2,0.3,0.4];
 z(1,1:3)=[0.5,0.6,0.7];
-mu=0.5;
+mu=0.01;
 passoX=1;
-passoL=1;
+passoL=ones(3,1);
 passoZ=1;
 for i=1:maxit
     r(i,1)=2*(x(i,1)-4)-l(i,1)+l(i,2);%deriv Lagr di x1    
@@ -31,12 +31,12 @@ for i=1:maxit
        0 , 0 , 0 , z(i,2), 0 , 0 , l(i,2), 0;
        0 , 0 , 0 , 0 , z(i,3), 0 , 0 ,l(i,3);
        ];
-    delta=cgs(J,r(i,:)',tol);
+    delta=cgs(J,r(i,:)',tol); %congj gradient with tol on relative res
     %res=J*r'-delta;
     %norm(res)-0.1*l*z';
-    x(i+1,:)=x(i,:)-passoX*delta(1:2)';
-    l(i+1,:)=l(i,:)-passoL*delta(3:5)';
-    z(i+1,:)=z(i,:)-passoZ*delta(6:8)';
+    x(i+1,:)=x(i,:)-0.1*delta(1:2)';
+    l(i+1,:)=l(i,:)-0.1*delta(3:5)';
+    z(i+1,:)=z(i,:)-0.1*delta(6:8)';
     if(norm(r)<tol)
         break;
     else
