@@ -1,6 +1,7 @@
 clear
 clc
 maxit=20;
+tol=1e-6;
 r=ones(maxit,8);
 x=ones(maxit,2);
 l=ones(maxit,3);
@@ -30,13 +31,13 @@ for i=1:maxit
        0 , 0 , 0 , z(i,2), 0 , 0 , l(i,2), 0;
        0 , 0 , 0 , 0 , z(i,3), 0 , 0 ,l(i,3);
        ];
-    delta=J\r(i,:)';
+    delta=cgs(J,r(i,:)',tol);
     %res=J*r'-delta;
     %norm(res)-0.1*l*z';
     x(i+1,:)=x(i,:)-passoX*delta(1:2)';
     l(i+1,:)=l(i,:)-passoL*delta(3:5)';
     z(i+1,:)=z(i,:)-passoZ*delta(6:8)';
-    if(norm(r)<1e-6)
+    if(norm(r)<tol)
         break;
     else
         mu=mu/2;
