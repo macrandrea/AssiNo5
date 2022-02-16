@@ -35,7 +35,12 @@ for i=1:maxit
         x(i+1,:)=x(i,:)+0.01*deltaX';
         l(i+1,:)=l(i,:)+0.01*deltaL';
         z(i+1,:)=z(i,:)+0.01*deltaZ';  
-        f(i+1)=(x(i+1,1)-4)^2-(x(i+1,2))^2+mu*e*log(z(i+1,:))';
+        f(i+1)=(x(i+1,1)-4)^2-(x(i+1,2))^2-mu*e*log(z(i+1,:))';
+        if(f(i+1)>f(i))
+            mu=mu/2;
+        else
+            break
+        end
     if(norm(r(i,:))>tol)
         mu=mu/2;
     else
