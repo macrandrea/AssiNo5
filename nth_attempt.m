@@ -1,18 +1,21 @@
 clear
 clc
-maxit=30;
+maxit=50;
 tol=1e-6;
 r=ones(maxit,8);
 x=ones(maxit,2);
 l=ones(maxit,3);
-z=ones(maxit,3);
-mu=1;
+z=ones(maxit+1,3);
+mu=20;
 x(1,1:2)=[1.9,0.44];
 l(1,1:3)=[2,3,4];
 z(1,1:3)=[1,3,4];
 I=eye(3);
 A=[-1,-1;1,0;0,1];
 H=[2 , 0;0 , 2,];
+passoX=[0.001,0.01]';
+e=[1,1,1];
+f(1)=(x(1,1)-4)^2-x(1,2)^2+mu*e*log(z(1,1:3))';
 for i=1:maxit
     r(i,1)=2*(x(i,1)-4)-l(i,1)+l(i,2);%deriv Lagr di x1    
     r(i,2)=2*x(i,2)-l(i,1)+l(i,3);    %deriv Lagr di x2     
@@ -27,13 +30,15 @@ for i=1:maxit
     deltaX=(H+A'*(Z\L)*A)\(-r(i,1:2)'-A'*(Z\r(i,3:5)'+L\r(i,6:8)'));
     deltaL=(L\Z)\(-A*deltaX-r(i,3:5)'+L\r(i,6:8)');
     deltaZ=-L\(r(i,6:8)'+Z*deltaL);
-    x(i+1,:)=x(i,:)+0.01*deltaX';
-    l(i+1,:)=l(i,:)+0.01*deltaL';
-    z(i+1,:)=z(i,:)+0.01*deltaZ';
-    if(norm(r(i,:))<tol)
-        disp('break')
-        break;
-    else
+    slX=deltaX'*r(i,1:2)';
+    %if(norm(r(i,:))>tol)
+        x(i+1,:)=x(i,:)+0.01*deltaX';
+        l(i+1,:)=l(i,:)+0.01*deltaL';
+        z(i+1,:)=z(i,:)+0.01*deltaZ';  
+        f(i+1)=(x(i+1,1)-4)^2-(x(i+1,2))^2+mu*e*log(z(i+1,:))';
+    if(norm(r(i,:))>tol)
         mu=mu/2;
+    else
+       break;
     end
 end
